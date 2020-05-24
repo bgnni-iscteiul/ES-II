@@ -1,5 +1,5 @@
 # Source Image name
-from ubuntu:16.04
+from esii:16.04
 # Mainter Name
 maintainer Amar Singh
 # Command to update and install Apache packages
