@@ -12,7 +12,7 @@ node {
     
     
     stage('Run from Docker-Compose'){
-        sh "docker-compose up -d ."
+        docker-compose up -d .
     }
    
     stage('Stop Containers'){
