@@ -26,17 +26,20 @@ node {
     
     stage('Running Container to Test'){
         powershell "docker run -d --name ${wp_container}"
+        powershell "docker run -d --name ${db_container}"
     }
     
     stage('Tag Images'){
-        powershell "docker tag ${wp_container} ${env.dockeruser}/es2:1.0"
+        powershell "docker tag ${wp_container} ${env.dockeruser}/wordpress:1.0"
+        powershell "docker tag ${db_container} ${env.dockeruser}/db:1.0"
     }
     
     stage('Pushing Images to DockerHub'){
        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'dockerpasswd', usernameVariable: 'dockeruser')]) {
            powershell "docker login -u ${dockeruser} -p ${dockerpasswd}"
        }
-       powershell "docker push ${dockeruser}/es2:1.0"
+        powershell "docker push ${dockeruser}/wordpress:1.0"
+        powershell "docker push ${dockeruser}/db:1.0"
     }
     
 }
