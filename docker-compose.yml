@@ -1,4 +1,4 @@
-version: '3'
+version: '1'
 services:
   #Database MySql
   db:
@@ -12,12 +12,12 @@ services:
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
     networks:
-      - back  
+      - wpsite  
   #WordPress CMS
   wordpress:
     depends_on:
       - db
-    image: wordpress:5.4.1
+    image: wordpress:latest
     restart: always
     volumes:
       - ./wp-content:/var/www/html/wp-content 
@@ -27,10 +27,10 @@ services:
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
     ports:
-      - '80:80'
+      - '8000:80'
     networks:
-      - back
+      - wpsite
 networks:
-  back:
+  wpsite:
 volumes:
   db_data:
