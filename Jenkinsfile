@@ -1,6 +1,6 @@
 def dockeruser = "a20687iscte"
-def wp_container = "wordpress_project"
-def db_container = "wordpress_project_db"
+def wp_container = "docker_wordpress_1"
+def db_container = "docker_db_1"
 
 
 node {
@@ -25,6 +25,18 @@ node {
     }
     
     stage('Running Container to Test'){
-        pwershell "docker run -d --name ${wp_container}"
+        powershell "docker run -d --name ${wp_container}"
+    }
+    
+    stage('Tag Images'){
+        powershell "docker tag ${wp_container} ${env.dockeruser}/es2:1.0"
+    }
+    
+    stage('Pushing Images to DockerHub'){
+       withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'dockerpasswd', usernameVariable: 'dockeruser')]) {
+           powershell "docker login -u ${dockeruser} -p ${dockerpasswd}"
+       }
+       powershell "docker push ${dockeruser}/es2:1.0"
+    }
     
 }
