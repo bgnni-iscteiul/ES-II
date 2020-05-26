@@ -2,7 +2,7 @@ version: '3'
 services:
   #Database MySql
   db:
-    image: a20687/db:latest
+    image: a20687iscte/db:latest
     restart: always
     volumes:
        - db_data:/var/lib/mysql
@@ -17,7 +17,7 @@ services:
   wordpress:
     depends_on:
       - db
-    image: a20687/wordpress:latest
+    image: a20687iscte/wordpress:latest
     restart: always
     volumes:
       - ./wp-content:/var/www/html/wp-content 
