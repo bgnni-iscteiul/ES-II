@@ -1,6 +1,6 @@
-def dockeruser = "bin0206"
-def wp_container = "docker_wordpress_1"
-def db_container = "docker_db_1"
+def dockeruser = "a20687iscte"
+def wp_container = "wordpress_project"
+def db_container = "wordpress_project_db"
 
 
 node {
@@ -23,5 +23,8 @@ node {
     stage('Remove Containers'){
         powershell "docker container prune"
     }
+    
+    stage('Running Container to Test'){
+        pwershell "docker run -d --name ${wp_container}"
     
 }
