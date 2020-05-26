@@ -12,7 +12,7 @@ node {
     
     
     stage('Run from Docker-Compose'){
-        powershell "docker build -t"
+        powershell "docker-compose up -d"
     }
    
     stage('Stop Containers'){
