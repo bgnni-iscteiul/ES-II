@@ -1,45 +1,28 @@
 def dockeruser = "a20687iscte"
-def wp_container = "docker_wordpress_1"
-def db_container = "docker_db_1"
-
+def imagename = "openjdk:7"
+def container = "jdk"
 
 node {
-    echo 'Building Apache Docker Image'
+    echo 'Building Java Docker Image'
     
     stage('Git Checkout') {
         git 'https://github.com/bgnni-iscteiul/ES-II'
     }
-    
-    
-    stage('Run from Docker-Compose'){
-        powershell "docker-compose up -d"
-    }
    
-    stage('Stop Containers'){
-        powershell "docker stop ${wp_container}"
-        powershell "docker stop ${db_container}"
-    }
-    
-    stage('Remove Containers'){
-        powershell "docker container prune"
+    stage('Build Docker Image'){
+        powershell "docker build -t ${imagename} ."
     }
     
     stage('Running Container to Test'){
-        powershell "docker run -d --name ${wp_container}"
-        powershell "docker run -d --name ${db_container}"
+        powershell "docker run -it --rm --name ${container} ${imagename}"
     }
-    
-    stage('Tag Images'){
-        powershell "docker tag ${wp_container} ${env.dockeruser}/wordpress:1.0"
-        powershell "docker tag ${db_container} ${env.dockeruser}/db:1.0"
-    }
+
     
     stage('Pushing Images to DockerHub'){
        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'dockerpasswd', usernameVariable: 'dockeruser')]) {
            powershell "docker login -u ${dockeruser} -p ${dockerpasswd}"
        }
-        powershell "docker push ${dockeruser}/wordpress:1.0"
-        powershell "docker push ${dockeruser}/db:1.0"
+        powershell "docker push ${dockeruser}/openjdk:7"
     }
     
 }
