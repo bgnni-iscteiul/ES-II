@@ -5,7 +5,9 @@ def container = "jdk"
 node {
     echo 'Building Java Docker Image'
     
-
+    stage('Git Checkout') {
+        git 'https://github.com/bgnni-iscteiul/ES-II'
+    }
    
     stage('Build Docker Image'){
         powershell "docker build -t ${imagename} ."
